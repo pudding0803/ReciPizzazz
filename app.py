@@ -1,6 +1,10 @@
-from flask import Flask, render_template, request, redirect, abort
+from flask import Flask, render_template, request, abort
+from flask_sqlalchemy import SQLAlchemy
+from config import USERNAME, PASSWORD, HOST, PORT, DATABASE
 
 app = Flask(__name__)
+app.config['SQLALCHEMY_DATABASE_URI'] = f'mysql://{USERNAME}:{PASSWORD}@{HOST}:{PORT}/{DATABASE}'
+db = SQLAlchemy(app)
 
 
 @app.route('/')
