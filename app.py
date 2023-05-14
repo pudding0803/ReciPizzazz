@@ -4,8 +4,14 @@ app = Flask(__name__)
 
 
 @app.route('/')
-def hello_world():
-    return render_template('pages/index.html')
+def index():
+    recipes = ['AAA', 'BBB', 'CCC', 'DDD', 'EEE', 'FFF']
+    return render_template('pages/index.html', recipes=recipes)
+
+
+@app.route('/ingredient_adjustment')
+def ingredient_adjustment():
+    return render_template('pages/ingredient-adjustment.html')
 
 
 @app.route('/add_row')

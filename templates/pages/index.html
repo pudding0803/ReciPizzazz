@@ -1,6 +1,54 @@
 {% extends 'base.html' %}
 
 {% block content %}
-
-
+    <div class="columns">
+        <div class="column is-3">
+            <div class="box">
+                <p class="is-size-5 has-text-weight-bold content">
+                    <span class="icon has-text-warning">
+                        <i class="fa-solid fa-bookmark"></i>
+                    </span>
+                    <span>我的書籤</span>
+                </p>
+                <ul>
+                    {% for recipe in recipes %}
+                        <li>
+                            <span class="icon">
+                                <i class="fa-solid fa-scroll"></i>
+                            </span>
+                            <span>{{ recipe }}</span>
+                        </li>
+                    {% endfor %}
+                </ul>
+            </div>
+            <div class="box">
+                <p class="is-size-5 has-text-weight-bold content">
+                    <span class="icon has-text-primary">
+                        <i class="fa-solid fa-book"></i>
+                    </span>
+                    <span>我的食譜</span>
+                </p>
+                <ul>
+                    {% for recipe in recipes %}
+                        <li>
+                            <span class="icon">
+                                <i class="fa-solid fa-scroll"></i>
+                            </span>
+                            <span>{{ recipe }}</span>
+                        </li>
+                    {% endfor %}
+                </ul>
+            </div>
+        </div>
+        <div class="column is-9">
+            <div class="box">
+                <p class="is-size-5 has-text-weight-bold content">
+                    <span class="icon has-text-info">
+                        <i class="fa-solid fa-newspaper"></i>
+                    </span>
+                    <span>近期更新</span>
+                </p>
+            </div>
+        </div>
+    </div>
 {% endblock %}
