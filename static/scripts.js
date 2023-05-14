@@ -11,11 +11,23 @@ $(document).ready(function () {
     });
 
     $('#ingredients').on('input', '.adjust', function() {
-        const currentInput = $(this);
-        const currentRow = currentInput.closest('div[id^="row-"]');
-        $('#adjust-button').prop('disabled', !currentInput.val());
-        $('#ingredients > div').not(currentRow).each(function() {
-            $(this).find('.adjust').prop('disabled', currentInput.val());
+        const $currentInput = $(this);
+        const $currentRow = $currentInput.closest('div[id^="row-"]');
+        $('#adjust-button').prop('disabled', !$currentInput.val());
+        $('#ingredients > div').not($currentRow).each(function() {
+            $(this).find('.adjust').prop('disabled', $currentInput.val());
+        });
+    });
+
+    $(document).on('click', 'button.lock-button', function() {
+        const $button = $(this);
+        $.ajax({
+            url: '/toggle_lock',
+            type: 'GET',
+            data: { locked: $button.data('state') === 'locked' },
+            success: function(response) {
+                $button.replaceWith(response);
+            }
         });
     });
 

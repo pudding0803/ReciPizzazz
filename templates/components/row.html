@@ -11,9 +11,14 @@
     <div class="control column is-2">
         <div class="select">
             <select aria-label="change method" class="method">
-                <option title="Hint for option 1" selected>隨比例改變</option>
-                <option>固定不變</option>
+                <option title="按下「進行調整」後，將會隨著設定的比例更新" selected>隨比例調整</option>
+                <option title="按下「進行調整」後，將會直接更新為設定的值">直接調整</option>
             </select>
         </div>
+    </div>
+    <div class="control column is-1">
+        {% with locked = False %}
+            {% include 'components/lock-button.html' %}
+        {% endwith %}
     </div>
 </div>
