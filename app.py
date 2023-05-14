@@ -8,7 +8,7 @@ def hello_world():
     return render_template('pages/index.html')
 
 
-@app.route('/add-row')
+@app.route('/add_row')
 def add_row():
     if not request.headers.get('X-Requested-With') == 'XMLHttpRequest':
         abort(403)
