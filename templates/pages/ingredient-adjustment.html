@@ -1,0 +1,66 @@
+{% extends 'base.html' %}
+
+{% block content %}
+    <div class="container">
+        <div class="columns block">
+            <div class="column is-2">
+                <span class="is-size-5 has-text-weight-bold">材料</span>
+            </div>
+            <div class="column is-1">
+                <span class="is-size-5 has-text-weight-bold">量</span>
+            </div>
+            <div class="column is-1">
+                <span class="is-size-5 has-text-weight-bold">更新量</span>
+            </div>
+        </div>
+        <div class="container block" id="ingredients">
+            {% for i in range(3) %}
+                {% with row = i %}
+                    {% include 'components/row.html' %}
+                {% endwith %}
+            {% endfor %}
+        </div>
+        <div class="field columns block">
+            <div class="control column is-3">
+                <button class="button is-primary" id="add-button">
+                    <span class="icon-text">
+                        <span class="icon">
+                            <i class="fas fa-plus"></i>
+                        </span>
+                        <span>新增欄位</span>
+                    </span>
+                </button>
+            </div>
+            <div class="control column is-3">
+                <button class="button is-primary js-modal-trigger" id="adjust-button" data-target="modal-js" disabled>
+                    <span class="icon-text">
+                        <span class="icon">
+                            <i class="fas fa-percent"></i>
+                        </span>
+                        <span>進行調整</span>
+                    </span>
+                </button>
+            </div>
+            <div class="control column is-3">
+            </div>
+        </div>
+    </div>
+    <div id="modal-js" class="modal">
+        <div class="modal-background"></div>
+        <div class="modal-card">
+            <header class="modal-card-head">
+                <p class="modal-card-title">調整確認</p>
+                <button class="delete" aria-label="close"></button>
+            </header>
+            <section class="modal-card-body">
+                所有設定為「隨比例調整」之材料將
+            </section>
+            <footer class="modal-card-foot">
+                <button id="update-button" class="button is-success">Update</button>
+                <button class="button">Cancel</button>
+            </footer>
+        </div>
+    </div>
+    <script src="{{ url_for('static', filename='scripts.js') }}" type="text/javascript"></script>
+    <script src="{{ url_for('static', filename='modal.js') }}" type="text/javascript"></script>
+{% endblock %}
