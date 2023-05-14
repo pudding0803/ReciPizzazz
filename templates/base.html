@@ -4,9 +4,9 @@
         <meta charset="UTF-8">
         <title>Recipizzazz</title>
         <link rel="icon" type="image/x-icon" href="{{ url_for('static', filename='favicon.ico') }}">
-        <link rel="stylesheet" href="https://cdn.jsdelivr.net/npm/bulma@0.9.4/css/bulma.min.css">
-        <script src="https://ajax.googleapis.com/ajax/libs/jquery/3.6.4/jquery.min.js"></script>
-        <script src="https://kit.fontawesome.com/839194a8d6.js" crossorigin="anonymous"></script>
+        <link rel="stylesheet" href="{{ url_for('static', filename='css/bulma.min.css') }}">
+        <script src="{{ url_for('static', filename='js/jquery-3.7.0.min.js') }}"></script>
+        <script src="{{ url_for('static', filename='js/all.min.js') }}" crossorigin="anonymous"></script>
     </head>
     <body>
         {% include 'includes/header.html' %}
