@@ -21,6 +21,7 @@ $(document).ready(function () {
 
     $(document).on('click', 'button.lock-button', function() {
         const $button = $(this);
+        $button.parent().parent().toggleClass('has-background-danger-light');
         $.ajax({
             url: '/toggle_lock',
             type: 'GET',
