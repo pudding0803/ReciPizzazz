@@ -1,3 +1,17 @@
+function parseFraction(fraction) {
+    const parts = fraction.split('/').map(function(part) {
+        return part.trim();
+    });
+    if (parts.length === 2) {
+        const numerator = parseFloat(parts[0]);
+        const denominator = parseFloat(parts[1]);
+        if (!isNaN(numerator) && !isNaN(denominator) && denominator !== 0) {
+            return numerator / denominator;
+        }
+    }
+    return NaN;
+}
+
 $(document).ready(function () {
     $('#add-button').on('click', () => {
         $.ajax({
@@ -33,9 +47,18 @@ $(document).ready(function () {
     });
 
     $('#update-button').on('click', () => {
-        const adjust = $('input.adjust').filter(function() {
+        $('#ingredients > div').each(function() {
+            const $quantity = $(this).find('.quantity');
+            const $lock = $(this).find('.lock-button');
+            if ($lock.data('state') === 'unlocked') {
+                const adjustedValue = $quantity.val() * parseFraction($('#adjust-ratio').text());
+                $quantity.val(+adjustedValue.toFixed(2));
+            }
+            $(this).find('.adjust').prop('disabled', false);
+        });
+        $('input.adjust').filter(function() {
             return $(this).val() !== '';
-        }).first().val();
-        console.log(adjust);
+        }).first().val('');
+        $('#adjust-button').prop('disabled', true);
     });
 });

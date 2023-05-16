@@ -9,8 +9,6 @@
         <input aria-label="adjust quantity" class="input adjust numeric" type="text" placeholder="調整量">
     </div>
     <div class="control column is-1">
-        {% with locked = False %}
-            {% include 'components/lock-button.html' %}
-        {% endwith %}
+        {% include 'components/lock-button.html' %}
     </div>
 </div>

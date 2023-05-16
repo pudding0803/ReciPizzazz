@@ -40,8 +40,6 @@
                 </span>
             </button>
         </div>
-        <div class="control column is-3">
-        </div>
     </div>
     <div id="modal-js" class="modal">
         <div class="modal-background"></div>
@@ -51,11 +49,18 @@
                 <button class="delete" aria-label="close"></button>
             </header>
             <section class="modal-card-body">
-                所有設定為「隨比例調整」之材料將
+                <span>所有設定未鎖定之材料將變為原本的</span>
+                <span id="adjust-ratio">ratio</span>
+                <span>倍</span>
+                {#
+                    1. click #adjust-button
+                    2. calutate ratio and send it to modal.html with ajax
+                    3. render modal.html to ingredient-adjustment.html
+                #}
             </section>
             <footer class="modal-card-foot">
-                <button id="update-button" class="button is-success">Update</button>
-                <button class="button">Cancel</button>
+                <button id="update-button" class="button is-success">確認</button>
+                <button class="button">取消</button>
             </footer>
         </div>
     </div>
