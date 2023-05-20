@@ -12,9 +12,12 @@
         {% include 'includes/header.html' %}
 
         <div id="content" class="container my-4">
+            {% include 'components/messages.html' %}
             {% block content %}{% endblock %}
         </div>
 
         {% include 'includes/footer.html' %}
+
+        <script src="{{ url_for('static', filename='js/notification.js') }}" type="text/javascript"></script>
     </body>
 </html>

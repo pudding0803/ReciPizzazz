@@ -1,0 +1,25 @@
+{% with messages = get_flashed_messages(with_categories=true) %}
+    {% if messages %}
+        {% for category, message in messages %}
+            <div class="columns my-5">
+                <div class="notification is-{{ category }} column is-8 is-offset-2 p-5">
+                    <button class="delete"></button>
+                    <span class="icon">
+                        {% if category == 'success' %}
+                            <i class="fa-solid fa-check"></i>
+                        {% elif category == 'link' %}
+                            <i class="fa-solid fa-link"></i>
+                        {% elif category == 'info' %}
+                            <i class="fa-solid fa-circle-info"></i>
+                        {% elif category == 'warning' %}
+                            <i class="fa-solid fa-triangle-exclamation"></i>
+                        {% elif category == 'danger' %}
+                            <i class="fa-solid fa-xmark"></i>
+                        {% endif %}
+                    </span>
+                    <span>{{ message }}</span>
+                </div>
+            </div>
+        {% endfor %}
+    {% endif %}
+{% endwith %}

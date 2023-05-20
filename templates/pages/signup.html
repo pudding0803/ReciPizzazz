@@ -1,0 +1,66 @@
+{% extends 'base.html' %}
+
+{% block content %}
+    <form method="POST" action="/signup">
+        <input type="hidden" name="csrf_token" value="{{ csrf_token() }}" />
+
+        <div class="columns">
+            <div class="column is-half is-offset-one-quarter">
+                <div class="field">
+                    <label for="name" class="label">名稱</label>
+                    <div class="control has-icons-left has-icons-right">
+                        <input id="name" class="input" type="text" name="name" placeholder="請輸入名稱">
+                        <span class="icon is-small is-left">
+                            <i class="fa-solid fa-address-card"></i>
+                        </span>
+                    </div>
+                    <p class="help"></p>
+                </div>
+
+                <div class="field">
+                    <label for="account" class="label">帳號</label>
+                    <div class="control has-icons-left has-icons-right">
+                        <input id="account" class="input" type="text" name="account" placeholder="請輸入帳號">
+                        <span class="icon is-small is-left">
+                            <i class="fas fa-user"></i>
+                        </span>
+                    </div>
+                    <p class="help"></p>
+                </div>
+
+                <div class="field">
+                    <label for="password" class="label">密碼</label>
+                    <div class="control has-icons-left has-icons-right">
+                        <input id="password" class="input" type="password" name="password" placeholder="請輸入密碼">
+                        <span class="icon is-small is-left">
+                            <i class="fa-solid fa-lock"></i>
+                        </span>
+                    </div>
+                    <p class="help"></p>
+                </div>
+
+                <div class="field">
+                    <label for="confirm_password" class="label">確認密碼</label>
+                    <div class="control has-icons-left has-icons-right">
+                        <input id="confirm_password" class="input" type="password" name="confirm_password" placeholder="請再次輸入密碼">
+                        <span class="icon is-small is-left">
+                            <i class="fa-solid fa-lock"></i>
+                        </span>
+                    </div>
+                    <p class="help"></p>
+                </div>
+
+                <div class="field is-grouped">
+                    <div class="control">
+                        <button class="button is-primary">
+                            <span class="icon">
+                                <i class="fa-solid fa-user-plus"></i>
+                            </span>
+                            <span>註冊</span>
+                        </button>
+                    </div>
+                </div>
+            </div>
+        </div>
+    </form>
+{% endblock %}
