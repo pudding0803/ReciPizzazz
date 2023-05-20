@@ -1,10 +1,12 @@
 from flask import Flask, render_template, request, abort
+from flask_migrate import Migrate
 from config import USERNAME, PASSWORD, HOST, PORT, DATABASE
 from models import db
 
 app = Flask(__name__)
 app.config['SQLALCHEMY_DATABASE_URI'] = f'mysql://{USERNAME}:{PASSWORD}@{HOST}:{PORT}/{DATABASE}'
 db.init_app(app)
+migrate = Migrate(app, db)
 
 
 @app.route('/')
