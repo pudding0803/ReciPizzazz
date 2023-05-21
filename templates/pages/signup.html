@@ -2,14 +2,14 @@
 
 {% block content %}
     <form method="POST" action="/signup">
-        <input type="hidden" name="csrf_token" value="{{ csrf_token() }}" />
+        {{ form.csrf_token }}
 
         <div class="columns">
             <div class="column is-half is-offset-one-quarter">
                 <div class="field">
-                    <label for="name" class="label">名稱</label>
+                    <label for="{{ form.name.id }}" class="label">名稱</label>
                     <div class="control has-icons-left has-icons-right">
-                        <input id="name" class="input" type="text" name="name" placeholder="請輸入名稱">
+                        {{ form.name(class_="input", placeholder="請輸入名稱", required=true) }}
                         <span class="icon is-small is-left">
                             <i class="fa-solid fa-address-card"></i>
                         </span>
@@ -18,9 +18,9 @@
                 </div>
 
                 <div class="field">
-                    <label for="account" class="label">帳號</label>
+                    <label for="{{ form.account.id }}" class="label">帳號</label>
                     <div class="control has-icons-left has-icons-right">
-                        <input id="account" class="input" type="text" name="account" placeholder="請輸入帳號">
+                        {{ form.account(class_="input", placeholder="請輸入帳號", required=true) }}
                         <span class="icon is-small is-left">
                             <i class="fas fa-user"></i>
                         </span>
@@ -29,9 +29,9 @@
                 </div>
 
                 <div class="field">
-                    <label for="password" class="label">密碼</label>
+                    <label for="{{ form.password.id }}" class="label">密碼</label>
                     <div class="control has-icons-left has-icons-right">
-                        <input id="password" class="input" type="password" name="password" placeholder="請輸入密碼">
+                        {{ form.password(class_="input", placeholder="請輸入密碼", required=true) }}
                         <span class="icon is-small is-left">
                             <i class="fa-solid fa-lock"></i>
                         </span>
@@ -40,9 +40,9 @@
                 </div>
 
                 <div class="field">
-                    <label for="confirm_password" class="label">確認密碼</label>
+                    <label for="{{ form.confirm_password.id }}" class="label">確認密碼</label>
                     <div class="control has-icons-left has-icons-right">
-                        <input id="confirm_password" class="input" type="password" name="confirm_password" placeholder="請再次輸入密碼">
+                        {{ form.confirm_password(class_="input", placeholder="請再次輸入密碼", required=true) }}
                         <span class="icon is-small is-left">
                             <i class="fa-solid fa-lock"></i>
                         </span>
@@ -50,7 +50,7 @@
                     <p class="help"></p>
                 </div>
 
-                <div class="field is-grouped">
+                <div class="field">
                     <div class="control">
                         <button class="button is-primary">
                             <span class="icon">

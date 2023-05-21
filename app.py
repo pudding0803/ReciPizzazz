@@ -4,10 +4,10 @@ import os
 from flask import Flask, render_template, request, abort, redirect, url_for, flash
 from flask_login import LoginManager, login_user, login_required, logout_user
 from flask_migrate import Migrate
-from flask_wtf.csrf import CSRFProtect
 from werkzeug.security import generate_password_hash, check_password_hash
 
 from config import USERNAME, PASSWORD, HOST, PORT, DATABASE
+from forms import SignupForm, LoginForm
 from models import db, User
 
 app = Flask(__name__)
@@ -16,7 +16,6 @@ app.config['SQLALCHEMY_DATABASE_URI'] = f'mysql://{USERNAME}:{PASSWORD}@{HOST}:{
 
 db.init_app(app)
 Migrate(app, db)
-csrf = CSRFProtect(app)
 
 login_manager = LoginManager()
 login_manager.init_app(app)
@@ -57,34 +56,43 @@ def index():
 
 
 @app.route('/signup', methods=['GET', 'POST'])
-@csrf.exempt
 def signup():
-    if request.method == 'GET':
-        return render_template('pages/signup.html')
-    user = User(
-        name=request.form.get('name'),
-        account=request.form.get('account'),
-        password=generate_password_hash(request.form.get('password'))
-    )
-    db.session.add(user)
-    db.session.commit()
-    login_user(user)
-    flash('註冊成功', 'success')
-    return redirect(url_for('index'))
+    form = SignupForm()
+    if form.validate_on_submit():
+        if form.password.data != form.confirm_password.data:
+            flash('輸入的密碼與確認密碼不相同', 'danger')
+            return render_template('pages/signup.html', form=form)
+        if User.query.filter(User.name == form.name.data).first() is not None:
+            flash('此名稱已被使用', 'danger')
+            return render_template('pages/signup.html', form=form)
+        if User.query.filter(User.account == form.account.data).first() is not None:
+            flash('此帳號已被使用', 'danger')
+            return render_template('pages/signup.html', form=form)
+        user = User(
+            name=form.name.data,
+            account=form.account.data,
+            password=generate_password_hash(form.password.data)
+        )
+        db.session.add(user)
+        db.session.commit()
+        login_user(user)
+        flash('註冊成功', 'success')
+        return redirect(url_for('index'))
+    return render_template('pages/signup.html', form=form)
 
 
 @app.route('/login', methods=['GET', 'POST'])
-@csrf.exempt
 def login():
-    if request.method == 'GET':
-        return render_template('pages/login.html')
-    user = User.query.filter_by(account=request.form.get('account')).first()
-    if user and check_password_hash(user.password, request.form.get('password')):
-        login_user(user)
-        flash('登入成功', 'success')
-        return redirect(url_for('index'))
-    flash('帳號或密碼錯誤', 'danger')
-    return render_template('pages/login.html')
+    form = LoginForm()
+    if form.validate_on_submit():
+        user = User.query.filter_by(account=form.account.data).first()
+        if user and check_password_hash(user.password, form.password.data):
+            login_user(user)
+            flash('登入成功', 'success')
+            return redirect(url_for('index'))
+        flash('帳號或密碼錯誤', 'danger')
+        return render_template('pages/login.html', form=form)
+    return render_template('pages/login.html', form=form)
 
 
 @app.route('/logout')
