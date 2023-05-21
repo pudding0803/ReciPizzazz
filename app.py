@@ -104,7 +104,6 @@ def logout():
 
 
 @app.route('/ingredient_adjustment')
-@login_required
 def ingredient_adjustment():
     return render_template('pages/ingredient-adjustment.html')
 

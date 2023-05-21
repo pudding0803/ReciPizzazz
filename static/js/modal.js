@@ -18,7 +18,11 @@ $(document).ready(function() {
     $('.js-modal-trigger').click(function() {
         const modal = $(this).data('target');
         const $target = $('#' + modal);
-
+        const $adjust = $('input.adjust').filter(function() {
+            return $(this).val() !== '';
+        }).first();
+        const $quantity = $adjust.closest('.field').find('.quantity');
+        $('#adjust-ratio').text(`${$adjust.val()} / ${$quantity.val()}`);
         openModal($target);
     });
 
