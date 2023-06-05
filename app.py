@@ -1,4 +1,5 @@
 import base64
+import configparser
 import os
 
 from flask import Flask, render_template, request, abort, redirect, url_for, flash
@@ -6,13 +7,23 @@ from flask_login import LoginManager, login_user, login_required, logout_user
 from flask_migrate import Migrate
 from werkzeug.security import generate_password_hash, check_password_hash
 
-from config import USERNAME, PASSWORD, HOST, PORT, DATABASE
 from forms import SignupForm, LoginForm
 from models import db, User
 
+config = configparser.ConfigParser()
+config.read('config.ini')
+
+username = config.get('database', 'username')
+password = config.get('database', 'password')
+host = config.get('database', 'host')
+port = config.getint('database', 'port')
+database = config.get('database', 'database')
+
+print(username, password, host, port, database)
+
 app = Flask(__name__)
 app.secret_key = os.urandom(32)
-app.config['SQLALCHEMY_DATABASE_URI'] = f'mysql://{USERNAME}:{PASSWORD}@{HOST}:{PORT}/{DATABASE}'
+app.config['SQLALCHEMY_DATABASE_URI'] = f'mysql://{username}:{password}@{host}:{port}/{database}'
 
 db.init_app(app)
 Migrate(app, db)

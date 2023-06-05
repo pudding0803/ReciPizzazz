@@ -13,6 +13,6 @@ $(document).ready(function () {
         $notification.css('opacity', '0');
         setTimeout(function () {
            $notification.remove();
-        }, 5000);
+        }, 3000);
     });
 });
