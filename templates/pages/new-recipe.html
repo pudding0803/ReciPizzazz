@@ -1,0 +1,53 @@
+{% extends 'base.html' %}
+
+{% block content %}
+    <form method="POST" action="/">
+        {{ form.csrf_token }}
+
+        <div class="field">
+            <label for="{{ form.title.id }}" class="label">標題</label>
+            <div class="control has-icons-left has-icons-right">
+                {{ form.title(class_="input", placeholder="請輸入標題", required=true) }}
+                <span class="icon is-small is-left">
+                    <i class="fa-solid fa-heading"></i>
+                </span>
+            </div>
+            <p class="help"></p>
+        </div>
+
+
+        <label class="label">
+            <span class="mr-2">材料</span>
+            <button class="button is-primary is-small" id="add-button">
+            <span class="icon">
+                <i class="fa-solid fa-plus"></i>
+            </span>
+            </button>
+        </label>
+
+        <div id="ingredients" class="field">
+            {% include 'components/recipe-row.html' %}
+        </div>
+
+        <div class="field">
+            <label for="{{ form.content.id }}" class="label">內容</label>
+            <div class="control">
+                <textarea name="content" id="{{ form.content.id }}" class="textarea ckeditor" placeholder="請輸入內容" required></textarea>
+            </div>
+            <p class="help"></p>
+        </div>
+
+        <div class="field">
+            <div class="control">
+                <button class="button is-primary">
+                    <span class="icon">
+                        <i class="fa-solid fa-plus"></i>
+                    </span>
+                    <span>發佈</span>
+                </button>
+            </div>
+        </div>
+    </form>
+    {{ ckeditor.load() }}
+    <script src="{{ url_for('static', filename='js/new-recipe.js') }}" type="text/javascript"></script>
+{% endblock %}

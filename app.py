@@ -3,11 +3,12 @@ import configparser
 import os
 
 from flask import Flask, render_template, request, abort, redirect, url_for, flash
+from flask_ckeditor import CKEditor
 from flask_login import LoginManager, login_user, login_required, logout_user
 from flask_migrate import Migrate
 from werkzeug.security import generate_password_hash, check_password_hash
 
-from forms import SignupForm, LoginForm
+from forms import SignupForm, LoginForm, CKEditorForm
 from models import db, User
 
 config = configparser.ConfigParser()
@@ -19,11 +20,11 @@ host = config.get('database', 'host')
 port = config.getint('database', 'port')
 database = config.get('database', 'database')
 
-print(username, password, host, port, database)
-
 app = Flask(__name__)
 app.secret_key = os.urandom(32)
 app.config['SQLALCHEMY_DATABASE_URI'] = f'mysql://{username}:{password}@{host}:{port}/{database}'
+app.config['CKEDITOR_PKG_TYPE'] = 'basic'
+ckeditor = CKEditor(app)
 
 db.init_app(app)
 Migrate(app, db)
@@ -119,12 +120,12 @@ def ingredient_adjustment():
     return render_template('pages/ingredient-adjustment.html')
 
 
-@app.route('/add_row')
-def add_row():
+@app.route('/add_adjustment_row')
+def add_adjustment_row():
     if not request.headers.get('X-Requested-With') == 'XMLHttpRequest':
         abort(403)
     row = request.args.get('row')
-    return render_template('components/row.html', row=row)
+    return render_template('components/adjustment-row.html', row=row)
 
 
 @app.route('/toggle_lock')
@@ -133,6 +134,23 @@ def toggle_lock():
         abort(403)
     locked = request.args.get('locked') == 'true'
     return render_template('components/lock-button.html', locked=not locked)
+
+
+@app.route('/new_recipe')
+@login_required
+def new_recipe():
+    form = CKEditorForm()
+    if form.validate_on_submit():
+        content = form.content.data
+        print(content)
+    return render_template('pages/new-recipe.html', form=form)
+
+
+@app.route('/add_recipe_row')
+def add_recipe_row():
+    if not request.headers.get('X-Requested-With') == 'XMLHttpRequest':
+        abort(403)
+    return render_template('components/recipe-row.html')
 
 
 if __name__ == '__main__':

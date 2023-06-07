@@ -20,8 +20,9 @@ class Recipe(db.Model):
 
     id = db.Column(db.Integer, primary_key=True, nullable=False, autoincrement=True)
     user_id = db.Column(db.Integer, db.ForeignKey('users.id'), nullable=False)
-    ingredients = db.Column(db.Text)
-    steps = db.Column(db.Text)
+    title = db.Column(db.String(50), nullable=False)
+    ingredients = db.Column(db.Text, nullable=False)
+    steps = db.Column(db.Text, nullable=False)
     reference = db.Column(db.Text)
     public = db.Column(db.Boolean, nullable=False)
     created_at = db.Column(db.DateTime, nullable=False, default=datetime.utcnow)

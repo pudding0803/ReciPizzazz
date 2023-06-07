@@ -2,7 +2,7 @@
 
 {% block content %}
     <form method="POST" action="/login">
-        {{ form.hidden_tag() }}
+        {{ form.csrf_token }}
 
         <div class="columns">
             <div class="column is-half is-offset-one-quarter">

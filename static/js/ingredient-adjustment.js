@@ -15,7 +15,7 @@ function parseFraction(fraction) {
 $(document).ready(function () {
     $('#add-button').on('click', () => {
         $.ajax({
-            url: '/add_row',
+            url: '/add_adjustment_row',
             type: 'GET',
             data: { row: $('#ingredients').children().length },
             success: function (response) {

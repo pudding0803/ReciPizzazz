@@ -23,12 +23,19 @@
                     </ul>
                 </div>
                 <div class="box">
-                    <p class="is-size-5 has-text-weight-bold content">
-                        <span class="icon has-text-primary">
-                            <i class="fa-solid fa-book"></i>
-                        </span>
-                        <span>我的食譜</span>
-                    </p>
+                    <div class="is-flex is-justify-content-space-between">
+                        <div class="is-size-5 has-text-weight-bold content">
+                            <span class="icon has-text-primary">
+                                <i class="fa-solid fa-book"></i>
+                            </span>
+                            <span>我的食譜</span>
+                        </div>
+                        <a role="button" class="button is-primary" id="add-button" href="{{ url_for('new_recipe') }}">
+                            <span class="icon">
+                                <i class="fa-solid fa-plus"></i>
+                            </span>
+                        </a>
+                    </div>
                     <ul>
                         {% for recipe in recipes %}
                             <li>
