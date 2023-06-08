@@ -12,12 +12,12 @@
                         <span>我的書籤</span>
                     </p>
                     <ul>
-                        {% for recipe in recipes %}
+                        {% for recipe in bookmark_recipes %}
                             <li>
                                 <span class="icon">
                                     <i class="fa-solid fa-scroll"></i>
                                 </span>
-                                <span>{{ recipe }}</span>
+                                <span>{{ recipe.title }}</span>
                             </li>
                         {% endfor %}
                     </ul>
@@ -37,12 +37,12 @@
                         </a>
                     </div>
                     <ul>
-                        {% for recipe in recipes %}
+                        {% for recipe in self_recipes %}
                             <li>
                                 <span class="icon">
                                     <i class="fa-solid fa-scroll"></i>
                                 </span>
-                                <span>{{ recipe }}</span>
+                                <span>{{ recipe.title }}</span>
                             </li>
                         {% endfor %}
                     </ul>
@@ -57,6 +57,13 @@
                     </span>
                     <span>近期更新</span>
                 </p>
+                {% for recipe in public_recipes %}
+                    <div class="card">
+                        {{ recipe.title }}
+                        {{ recipe.created_at }}
+                        {{ recipe.user.name }}
+                    </div>
+                {% endfor %}
             </div>
         </div>
     </div>

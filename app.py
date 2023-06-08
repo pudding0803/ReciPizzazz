@@ -63,8 +63,14 @@ def load_user_from_request(request):
 
 @app.route('/')
 def index():
-    recipes = ['AAA', 'BBB', 'CCC', 'DDD', 'EEE', 'FFF']
-    return render_template('pages/index.html', recipes=recipes)
+    public_recipes = Recipe.query.filter_by(public=True).join(User).order_by(Recipe.created_at.desc()).all()
+    self_recipes = Recipe.query.filter_by(user_id=current_user.id).all() if current_user.is_authenticated else []
+    return render_template(
+        'pages/index.html',
+        public_recipes=public_recipes,
+        self_recipes=self_recipes,
+        bookmark_recipes=[]
+    )
 
 
 @app.route('/signup', methods=['GET', 'POST'])

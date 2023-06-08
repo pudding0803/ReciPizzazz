@@ -2,6 +2,8 @@ from flask_login import UserMixin
 from flask_sqlalchemy import SQLAlchemy
 from datetime import datetime
 
+from sqlalchemy.orm import relationship
+
 db = SQLAlchemy()
 
 
@@ -13,6 +15,8 @@ class User(UserMixin, db.Model):
     password = db.Column(db.String(110), nullable=False)
     name = db.Column(db.String(50), nullable=False)
     created_at = db.Column(db.DateTime, nullable=False, default=datetime.utcnow)
+
+    recipes = relationship("Recipe", backref="user")
 
 
 class Recipe(db.Model):
