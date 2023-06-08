@@ -140,15 +140,15 @@ def toggle_lock():
 def new_recipe():
     form = CKEditorForm()
     if form.validate_on_submit():
-        # recipe = Recipe(
-        #     user_id=current_user.id,
-        #     title=form.title.data,
-        #     ingredients=form.ingredients.data,
-        #     contents=form.contents.data,
-        #     public=form.public.data
-        # )
-        # db.session.add(recipe)
-        # db.session.commit()
+        recipe = Recipe(
+            user_id=current_user.id,
+            title=form.title.data,
+            ingredients=form.ingredients.data,
+            contents=form.contents.data,
+            public=form.public.data
+        )
+        db.session.add(recipe)
+        db.session.commit()
         flash('發布成功', 'success')
         return redirect(url_for('index'))
     return render_template('pages/new-recipe.html', form=form)
