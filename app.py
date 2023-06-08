@@ -4,12 +4,12 @@ import os
 
 from flask import Flask, render_template, request, abort, redirect, url_for, flash
 from flask_ckeditor import CKEditor
-from flask_login import LoginManager, login_user, login_required, logout_user
+from flask_login import LoginManager, login_user, login_required, logout_user, current_user
 from flask_migrate import Migrate
 from werkzeug.security import generate_password_hash, check_password_hash
 
 from forms import SignupForm, LoginForm, CKEditorForm
-from models import db, User
+from models import db, User, Recipe
 
 config = configparser.ConfigParser()
 config.read('config.ini')
@@ -103,7 +103,6 @@ def login():
             flash('登入成功', 'success')
             return redirect(url_for('index'))
         flash('帳號或密碼錯誤', 'danger')
-        return render_template('pages/login.html', form=form)
     return render_template('pages/login.html', form=form)
 
 
@@ -136,13 +135,22 @@ def toggle_lock():
     return render_template('components/lock-button.html', locked=not locked)
 
 
-@app.route('/new_recipe')
+@app.route('/new_recipe', methods=['GET', 'POST'])
 @login_required
 def new_recipe():
     form = CKEditorForm()
     if form.validate_on_submit():
-        content = form.content.data
-        print(content)
+        # recipe = Recipe(
+        #     user_id=current_user.id,
+        #     title=form.title.data,
+        #     ingredients=form.ingredients.data,
+        #     contents=form.contents.data,
+        #     public=form.public.data
+        # )
+        # db.session.add(recipe)
+        # db.session.commit()
+        flash('發布成功', 'success')
+        return redirect(url_for('index'))
     return render_template('pages/new-recipe.html', form=form)
 
 

@@ -1,24 +1,26 @@
 {% extends 'base.html' %}
 
 {% block content %}
-    <form method="POST" action="/">
+    <form method="POST" action="/new_recipe">
         {{ form.csrf_token }}
 
-        <div class="field">
-            <label for="{{ form.title.id }}" class="label">標題</label>
-            <div class="control has-icons-left has-icons-right">
-                {{ form.title(class_="input", placeholder="請輸入標題", required=true) }}
-                <span class="icon is-small is-left">
-                    <i class="fa-solid fa-heading"></i>
-                </span>
+        <div class="columns">
+            <div class="column is-7 field">
+                <label for="{{ form.title.id }}" class="label">標題</label>
+                <div class="control has-icons-left has-icons-right">
+                    {{ form.title(class_="input", placeholder="請輸入標題", required=true) }}
+                    <span class="icon is-small is-left">
+                        <i class="fa-solid fa-heading"></i>
+                    </span>
+                </div>
+                <p class="help"></p>
             </div>
-            <p class="help"></p>
         </div>
 
 
         <label class="label">
             <span class="mr-2">材料</span>
-            <button class="button is-primary is-small" id="add-button">
+            <button id="add-button" class="button is-primary is-small" type="button">
             <span class="icon">
                 <i class="fa-solid fa-plus"></i>
             </span>
@@ -30,12 +32,28 @@
         </div>
 
         <div class="field">
-            <label for="{{ form.content.id }}" class="label">內容</label>
+            <label for="{{ form.contents.id }}" class="label">內容</label>
             <div class="control">
-                <textarea name="content" id="{{ form.content.id }}" class="textarea ckeditor" placeholder="請輸入內容" required></textarea>
+                {{ form.contents(class_="textarea", placeholder="請輸入內容", required=true) }}
             </div>
             <p class="help"></p>
         </div>
+
+        <div class="field">
+            <div class="field">
+                {{ form.public(class_="switch is-rounded") }}
+                <label for="{{ form.public.id }}">公開</label>
+            </div>
+        </div>
+
+        <p class="content has-text-info">
+            <span class="icon-text">
+                <span class="icon">
+                    <i class="fa-solid fa-link"></i>
+                </span>
+                <span>若有參考來源建議附上</span>
+            </span>
+        </p>
 
         <div class="field">
             <div class="control">
@@ -43,7 +61,7 @@
                     <span class="icon">
                         <i class="fa-solid fa-plus"></i>
                     </span>
-                    <span>發佈</span>
+                    <span>發布</span>
                 </button>
             </div>
         </div>

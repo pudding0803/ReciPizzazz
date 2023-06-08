@@ -13,7 +13,7 @@ function parseFraction(fraction) {
 }
 
 $(document).ready(function () {
-    $('#add-button').on('click', () => {
+    $('#add-button').on('click', function () {
         $.ajax({
             url: '/add_adjustment_row',
             type: 'GET',
@@ -46,7 +46,7 @@ $(document).ready(function () {
         });
     });
 
-    $('#update-button').on('click', () => {
+    $('#update-button').on('click', function () {
         $('#ingredients > div').each(function() {
             const $quantity = $(this).find('.quantity');
             const $lock = $(this).find('.lock-button');

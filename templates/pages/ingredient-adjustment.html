@@ -12,7 +12,7 @@
             <span class="is-size-5 has-text-weight-bold">更新量</span>
         </div>
     </div>
-    <div class="container block" id="ingredients">
+    <div id="ingredients" class="container block">
         {% for i in range(3) %}
             {% with row = i %}
                 {% include 'components/adjustment-row.html' %}
@@ -21,7 +21,7 @@
     </div>
     <div class="field columns block">
         <div class="control column is-3">
-            <button class="button is-primary" id="add-button">
+            <button id="add-button" class="button is-primary">
                 <span class="icon-text">
                     <span class="icon">
                         <i class="fa-solid fa-plus"></i>
@@ -31,7 +31,7 @@
             </button>
         </div>
         <div class="control column is-3">
-            <button class="button is-primary js-modal-trigger" id="adjust-button" data-target="modal-js" disabled>
+            <button id="adjust-button" class="button is-primary js-modal-trigger" data-target="modal-js" disabled>
                 <span class="icon-text">
                     <span class="icon">
                         <i class="fa-solid fa-scale-balanced"></i>

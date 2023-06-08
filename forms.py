@@ -1,6 +1,6 @@
 from flask_ckeditor import CKEditorField
 from flask_wtf import FlaskForm
-from wtforms import StringField, PasswordField, SubmitField
+from wtforms import StringField, PasswordField, SubmitField, BooleanField
 from wtforms.validators import DataRequired
 
 
@@ -20,5 +20,7 @@ class LoginForm(FlaskForm):
 
 class CKEditorForm(FlaskForm):
     title = StringField(validators=[DataRequired()])
-    content = CKEditorField(validators=[DataRequired()])
+    ingredients = StringField(validators=[DataRequired()])
+    contents = CKEditorField(validators=[DataRequired()])
+    public = BooleanField(default=True)
     submit = SubmitField()
