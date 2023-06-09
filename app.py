@@ -1,8 +1,9 @@
 import base64
 import configparser
 import os
+from datetime import datetime, timedelta
 
-from flask import Flask, render_template, request, abort, redirect, url_for, flash
+from flask import Flask, render_template, request, abort, redirect, url_for, flash, Markup, Request
 from flask_ckeditor import CKEditor
 from flask_login import LoginManager, login_user, login_required, logout_user, current_user
 from flask_migrate import Migrate
@@ -24,10 +25,10 @@ app = Flask(__name__)
 app.secret_key = os.urandom(32)
 app.config['SQLALCHEMY_DATABASE_URI'] = f'mysql://{username}:{password}@{host}:{port}/{database}'
 app.config['CKEDITOR_PKG_TYPE'] = 'basic'
-ckeditor = CKEditor(app)
 
 db.init_app(app)
 Migrate(app, db)
+ckeditor = CKEditor(app)
 
 login_manager = LoginManager()
 login_manager.init_app(app)
@@ -42,7 +43,7 @@ def load_user(user_id):
 
 
 @login_manager.request_loader
-def load_user_from_request(request):
+def load_user_from_request(request: Request) -> User | None:
     api_key = request.args.get('api_key')
     if api_key:
         user = User.query.filter_by(api_key=api_key).first()
@@ -59,6 +60,21 @@ def load_user_from_request(request):
         if user:
             return user
     return None
+
+
+@app.template_filter('friendly_time')
+def format_friendly_time(timestamp: datetime) -> str:
+    diff = datetime.utcnow() - timestamp
+    if diff < timedelta(minutes=1):
+        return f'{diff.seconds} 秒前'
+    elif diff < timedelta(hours=1):
+        return f'{diff.seconds // 60} 分鐘前'
+    elif diff < timedelta(days=1):
+        return f'{diff.seconds // 3600} 小時前'
+    elif diff < timedelta(weeks=1):
+        return f'{diff.days} 天前'
+    else:
+        return timestamp.strftime('%Y-%m-%d %H:%M:%S')
 
 
 @app.route('/')

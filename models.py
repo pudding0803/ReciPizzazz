@@ -1,3 +1,4 @@
+import pytz
 from flask_login import UserMixin
 from flask_sqlalchemy import SQLAlchemy
 from datetime import datetime
@@ -14,7 +15,7 @@ class User(UserMixin, db.Model):
     account = db.Column(db.String(50), nullable=False)
     password = db.Column(db.String(110), nullable=False)
     name = db.Column(db.String(50), nullable=False)
-    created_at = db.Column(db.DateTime, nullable=False, default=datetime.utcnow)
+    created_at = db.Column(db.DateTime, nullable=False, default=lambda: datetime.now(pytz.timezone('Asia/Taipei')))
 
     recipes = relationship("Recipe", backref="user")
 
@@ -28,8 +29,8 @@ class Recipe(db.Model):
     ingredients = db.Column(db.Text, nullable=False)
     contents = db.Column(db.Text, nullable=False)
     public = db.Column(db.Boolean, nullable=False)
-    created_at = db.Column(db.DateTime, nullable=False, default=datetime.utcnow)
-    updated_at = db.Column(db.DateTime, nullable=False, default=datetime.utcnow)
+    created_at = db.Column(db.DateTime, nullable=False, default=lambda: datetime.now(pytz.timezone('Asia/Taipei')))
+    updated_at = db.Column(db.DateTime, nullable=False, default=lambda: datetime.now(pytz.timezone('Asia/Taipei')))
 
 
 class Followership(db.Model):
@@ -48,4 +49,4 @@ class Bookmark(db.Model):
     user_id = db.Column(db.Integer, db.ForeignKey('users.id'), nullable=False)
     recipe_id = db.Column(db.Integer, db.ForeignKey('recipes.id'), nullable=False)
     marking = db.Column(db.Boolean, nullable=False, default=True)
-    created_at = db.Column(db.DateTime, nullable=False, default=datetime.utcnow)
+    created_at = db.Column(db.DateTime, nullable=False, default=lambda: datetime.now(pytz.timezone('Asia/Taipei')))
