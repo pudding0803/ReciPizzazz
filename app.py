@@ -10,7 +10,7 @@ from flask_migrate import Migrate
 from werkzeug.security import generate_password_hash, check_password_hash
 
 from forms import SignupForm, LoginForm, CKEditorForm
-from models import db, User, Recipe
+from models import db, User, Recipe, Followership
 
 config = configparser.ConfigParser()
 config.read('config.ini')
@@ -134,6 +134,23 @@ def logout():
     logout_user()
     flash('已登出', 'info')
     return redirect(url_for('index'))
+
+
+@app.route('/profile/<name>')
+def profile(name):
+    user = User.query.filter_by(name=name).first()
+    if user:
+        recipe_count = Recipe.query.filter_by(user_id=user.id).count()
+        followed_count = Followership.query.filter_by(followed_id=user.id).count()
+        return render_template(
+            'pages/profile.html',
+            user=user,
+            recipe_count=recipe_count,
+            followed_count=followed_count
+        )
+    else:
+        flash('無此使用者', 'danger')
+        return redirect(url_for('index'))
 
 
 @app.route('/ingredient_adjustment')

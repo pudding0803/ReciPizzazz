@@ -5,7 +5,7 @@
         {% if current_user.is_authenticated %}
             <div class="column is-3">
                 <div class="box">
-                    <p class="is-size-5 has-text-weight-bold content">
+                    <p class="title is-5=">
                         <span class="icon has-text-warning">
                             <i class="fa-solid fa-bookmark"></i>
                         </span>
@@ -24,12 +24,12 @@
                 </div>
                 <div class="box">
                     <div class="is-flex is-justify-content-space-between">
-                        <div class="is-size-5 has-text-weight-bold content">
+                        <p class="title is-5">
                             <span class="icon has-text-primary">
                                 <i class="fa-solid fa-book"></i>
                             </span>
                             <span>我的食譜</span>
-                        </div>
+                        </p>
                         <a role="button" id="add-button" class="button is-primary" href="{{ url_for('new_recipe') }}">
                             <span class="icon">
                                 <i class="fa-solid fa-plus"></i>
@@ -51,12 +51,12 @@
         {% endif %}
         <div class="column is-9">
             <div class="box">
-                <h5 class="title is-size-5 content">
+                <p class="title is-5">
                     <span class="icon has-text-info">
                         <i class="fa-solid fa-newspaper"></i>
                     </span>
                     <span>近期更新</span>
-                </h5>
+                </p>
                 <div class="px-5">
                     {% for recipe in public_recipes %}
                         <div class="card has-background-link-light mb-6 p-6">
@@ -74,7 +74,7 @@
                                     <span>{{ recipe.created_at|friendly_time }}</span>
                                 </span>
                             </div>
-                            <h5 class="title is-4">{{ recipe.title }}</h5>
+                            <span class="title is-4">{{ recipe.title }}</span>
                         </div>
                     {% endfor %}
                 </div>

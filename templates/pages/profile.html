@@ -1,0 +1,49 @@
+{% extends 'base.html' %}
+
+{% block content %}
+    <div class="columns p-6">
+        <div class="column columns is-8">
+            <p class="title is-3">{{ user.name }}</p>
+            {% if current_user.is_authenticated and user.id != current_user.id %}
+                <button class="button is-primary">
+                    <span class="icon-text">
+                        <span class="icon">
+                            <i class="fa-solid fa-plus"></i>
+                        </span>
+                        <span>追蹤</span>
+                    </span>
+                </button>
+                <button class="button is-info">
+                    <span class="icon-text">
+                        <span class="icon">
+                            <i class="fa-solid fa-check"></i>
+                        </span>
+                        <span>追蹤中</span>
+                    </span>
+                </button>
+            {% endif %}
+        </div>
+        <div class="column is-2 has-text-centered">
+            <div class="content">
+                <span class="icon-text">
+                    <span class="icon">
+                        <i class="fa-solid fa-book"></i>
+                    </span>
+                    <span class="is-size-5">食譜</span>
+                </span>
+            </div>
+            <p class="is-size-5">{{ recipe_count }}</p>
+        </div>
+        <div class="column is-2 has-text-centered">
+            <div class="content">
+                <span class="icon-text">
+                    <span class="icon">
+                        <i class="fa-solid fa-users"></i>
+                    </span>
+                    <span class="is-size-5">粉絲</span>
+                </span>
+            </div>
+            <p class="is-size-5">{{ followed_count }}</p>
+        </div>
+    </div>
+{% endblock %}
