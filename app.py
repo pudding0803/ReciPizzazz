@@ -3,10 +3,12 @@ import configparser
 import os
 from datetime import datetime, timedelta
 
-from flask import Flask, render_template, request, abort, redirect, url_for, flash, Markup, Request
+import pytz
+from flask import Flask, render_template, request, abort, redirect, url_for, flash, Request
 from flask_ckeditor import CKEditor
 from flask_login import LoginManager, login_user, login_required, logout_user, current_user
 from flask_migrate import Migrate
+from hashids import Hashids
 from werkzeug.security import generate_password_hash, check_password_hash
 
 from forms import SignupForm, LoginForm, CKEditorForm
@@ -64,7 +66,7 @@ def load_user_from_request(request: Request) -> User | None:
 
 @app.template_filter('friendly_time')
 def format_friendly_time(timestamp: datetime) -> str:
-    diff = datetime.utcnow() - timestamp
+    diff = datetime.now(pytz.timezone('Asia/Taipei')).replace(tzinfo=None) - timestamp
     if diff < timedelta(minutes=1):
         return f'{diff.seconds} 秒前'
     elif diff < timedelta(hours=1):
@@ -162,6 +164,16 @@ def profile(name):
         return redirect(url_for('index'))
 
 
+@app.route('/view_recipe/<token>')
+def view_recipe(token):
+    recipe = Recipe.query.filter_by(token=token).first()
+    if recipe:
+        return render_template('pages/recipe.html', recipe=recipe)
+    else:
+        flash('無此食譜', 'danger')
+        return redirect(url_for('index'))
+
+
 @app.route('/ingredient_adjustment')
 def ingredient_adjustment():
     return render_template('pages/ingredient-adjustment.html')
@@ -196,6 +208,8 @@ def new_recipe():
             public=form.public.data
         )
         db.session.add(recipe)
+        db.session.commit()
+        recipe.token = Hashids(salt="Recipizzazz", min_length=20).encode(recipe.id)
         db.session.commit()
         flash('發布成功', 'success')
         return redirect(url_for('index'))
