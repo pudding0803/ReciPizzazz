@@ -91,6 +91,8 @@ def index():
 
 @app.route('/signup', methods=['GET', 'POST'])
 def signup():
+    if current_user.is_authenticated:
+        return redirect(url_for('index'))
     form = SignupForm()
     if form.validate_on_submit():
         if form.password.data != form.confirm_password.data:
@@ -117,6 +119,8 @@ def signup():
 
 @app.route('/login', methods=['GET', 'POST'])
 def login():
+    if current_user.is_authenticated:
+        return redirect(url_for('index'))
     form = LoginForm()
     if form.validate_on_submit():
         user = User.query.filter_by(account=form.account.data).first()
@@ -140,12 +144,15 @@ def logout():
 def profile(name):
     user = User.query.filter_by(name=name).first()
     if user:
-        recipe_count = Recipe.query.filter_by(user_id=user.id).count()
-        followed_count = Followership.query.filter_by(followed_id=user.id).count()
-        public_recipes = Recipe.query.filter_by(public=True).order_by(Recipe.created_at.desc()).all()
+        recipe_count = Recipe.query.filter_by(user_id=user.id, public=True).count()
+        followed_count = Followership.query.filter_by(followed_id=user.id, following=True).count()
+        public_recipes = Recipe.query.filter_by(user_id=user.id, public=True).order_by(Recipe.created_at.desc()).all()
+        following = current_user.is_authenticated and \
+            Followership.query.filter_by(follower_id=current_user.id, followed_id=user.id).first() is not None
         return render_template(
             'pages/profile.html',
             user=user,
+            following=following,
             recipe_count=recipe_count,
             followed_count=followed_count,
             public_recipes=public_recipes

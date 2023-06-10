@@ -2,29 +2,46 @@
 
 {% block content %}
     <div class="m-6">
-        <div class="columns">
-            <div class="column columns is-8">
-                <p class="title is-3">{{ user.name }}</p>
-                {% if current_user.is_authenticated and user.id != current_user.id %}
-                    <button class="button is-primary">
-                        <span class="icon-text">
-                            <span class="icon">
-                                <i class="fa-solid fa-plus"></i>
+        <div class="block">
+            <div class="columns is-vcentered">
+                <div class="column is-narrow">
+                    <p class="title is-4">{{ user.name }}</p>
+                </div>
+                <div class="column is-narrow">
+                    {% if current_user.is_authenticated and user.id != current_user.id %}
+                        {% if following %}
+                            <button class="button is-info">
+                                <span class="icon-text">
+                                    <span class="icon">
+                                        <i class="fa-solid fa-check"></i>
+                                    </span>
+                                    <span>追蹤中</span>
+                                </span>
+                            </button>
+                        {% else %}
+                            <button class="button is-primary">
+                                <span class="icon-text">
+                                    <span class="icon">
+                                        <i class="fa-solid fa-plus"></i>
+                                    </span>
+                                    <span>追蹤</span>
+                                </span>
+                            </button>
+                        {% endif %}
+                    {% else %}
+                        <a href="#">
+                            <span class="icon-text is-size-4 has-text-grey-light">
+                                <span class="icon">
+                                    <i class="fa-solid fa-gear"></i>
+                                </span>
                             </span>
-                            <span>追蹤</span>
-                        </span>
-                    </button>
-                    <button class="button is-info">
-                        <span class="icon-text">
-                            <span class="icon">
-                                <i class="fa-solid fa-check"></i>
-                            </span>
-                            <span>追蹤中</span>
-                        </span>
-                    </button>
-                {% endif %}
+                        </a>
+                    {% endif %}
+                </div>
             </div>
-            <div class="column is-2 has-text-centered">
+        </div>
+        <div class="columns">
+            <div class="column is-1 has-text-centered">
                 <div class="content">
                     <span class="icon-text">
                         <span class="icon">
@@ -35,7 +52,7 @@
                 </div>
                 <p class="is-size-5">{{ recipe_count }}</p>
             </div>
-            <div class="column is-2 has-text-centered">
+            <div class="column is-1 has-text-centered">
                 <div class="content">
                     <span class="icon-text">
                         <span class="icon">
@@ -48,18 +65,23 @@
             </div>
         </div>
         <hr>
+        <p class="title is-4">公開食譜</p>
+        <div class="is-flex is-justify-content-space-between is-flex-wrap-wrap">
         {% for recipe in public_recipes %}
-            <div class="card has-background-link-light mb-6 p-6">
-                <p class="title is-4">{{ recipe.title }}</p>
-                <div class="is-flex is-justify-content-space-between">
-                    <span class="icon-text has-text-grey-light">
-                        <span class="icon">
-                            <i class="fa-solid fa-clock"></i>
+            <div class="column is-half">
+                <div class="card has-background-link-light my-2 p-6">
+                    <p class="title is-4">{{ recipe.title }}</p>
+                    <div class="is-flex is-justify-content-space-between">
+                        <span class="icon-text has-text-grey-light">
+                            <span class="icon">
+                                <i class="fa-solid fa-clock"></i>
+                            </span>
+                            <span>{{ recipe.created_at|friendly_time }}</span>
                         </span>
-                        <span>{{ recipe.created_at|friendly_time }}</span>
-                    </span>
+                    </div>
                 </div>
             </div>
         {% endfor %}
+        </div>
     </div>
 {% endblock %}

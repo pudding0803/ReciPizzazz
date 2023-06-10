@@ -17,18 +17,22 @@
             </div>
         </div>
 
-
-        <label class="label">
-            <span class="mr-2">材料</span>
-            <button id="add-button" class="button is-primary is-small" type="button">
-            <span class="icon">
-                <i class="fa-solid fa-plus"></i>
-            </span>
-            </button>
-        </label>
-
-        <div id="ingredients" class="field">
-            {% include 'components/recipe-row.html' %}
+        <div class="field">
+            <div class="columns is-vcentered">
+                <div class="column is-narrow">
+                    <label class="label">材料</label>
+                </div>
+                <div class="column is-narrow">
+                    <button id="add-button" class="button is-primary is-small" type="button">
+                        <span class="icon">
+                            <i class="fa-solid fa-plus"></i>
+                        </span>
+                    </button>
+                </div>
+            </div>
+            <div id="ingredients">
+                {% include 'components/recipe-row.html' %}
+            </div>
         </div>
 
         <div class="field">
@@ -40,10 +44,8 @@
         </div>
 
         <div class="field">
-            <div class="field">
-                {{ form.public(class_="switch is-rounded") }}
-                <label for="{{ form.public.id }}">公開</label>
-            </div>
+            {{ form.public(class_="switch is-rounded") }}
+            <label for="{{ form.public.id }}">公開</label>
         </div>
 
         <p class="content has-text-grey-light">
