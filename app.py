@@ -142,11 +142,13 @@ def profile(name):
     if user:
         recipe_count = Recipe.query.filter_by(user_id=user.id).count()
         followed_count = Followership.query.filter_by(followed_id=user.id).count()
+        public_recipes = Recipe.query.filter_by(public=True).order_by(Recipe.created_at.desc()).all()
         return render_template(
             'pages/profile.html',
             user=user,
             recipe_count=recipe_count,
-            followed_count=followed_count
+            followed_count=followed_count,
+            public_recipes=public_recipes
         )
     else:
         flash('無此使用者', 'danger')
