@@ -1,5 +1,33 @@
 {% extends 'base.html' %}
 
 {% block content %}
-
+<div class="columns">
+    <div class="column is-8 is-offset-2 content">
+        <div class="is-flex is-justify-content-space-between content">
+            <a href="{{ url_for('profile', name=recipe.user.name) }}">
+                <span class="icon-text has-text-grey-light">
+                    <span class="icon">
+                        <i class="fa-solid fa-user"></i>
+                    </span>
+                    <span>{{ recipe.user.name }}</span>
+                </span>
+            </a>
+            <span class="icon-text has-text-grey-light">
+                <span class="icon">
+                    <i class="fa-solid fa-clock"></i>
+                </span>
+                <span>{{ recipe.created_at|friendly_time }}</span>
+            </span>
+        </div>
+        <p class="title is-4">{{ recipe.title }}</p>
+        <p class="title is-5">材料</p>
+        <ul>
+            {% for ingredient in recipe.ingredients %}
+                <li>{{ ingredient.name }} {{ ingredient.quantity }}</li>
+            {% endfor %}
+        </ul>
+        <p class="title is-5">作法</p>
+        <p>{{ recipe.contents|safe }}</p>
+    </div>
+</div>
 {% endblock %}

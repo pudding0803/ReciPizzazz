@@ -1,6 +1,8 @@
 import base64
 import configparser
+import json
 import os
+import urllib.parse
 from datetime import datetime, timedelta
 
 import pytz
@@ -81,7 +83,7 @@ def format_friendly_time(timestamp: datetime) -> str:
 
 @app.route('/')
 def index():
-    public_recipes = Recipe.query.filter_by(public=True).join(User).order_by(Recipe.created_at.desc()).all()
+    public_recipes = Recipe.query.filter_by(public=True).order_by(Recipe.created_at.desc()).all()
     self_recipes = Recipe.query.filter_by(user_id=current_user.id).all() if current_user.is_authenticated else []
     return render_template(
         'pages/index.html',
@@ -168,6 +170,9 @@ def profile(name):
 def view_recipe(token):
     recipe = Recipe.query.filter_by(token=token).first()
     if recipe:
+        recipe.user.name = recipe.user.name     # ???
+        recipe.ingredients = json.loads(urllib.parse.unquote(recipe.ingredients))
+        recipe.user.name = recipe.user.name     # ???
         return render_template('pages/recipe.html', recipe=recipe)
     else:
         flash('無此食譜', 'danger')

@@ -59,25 +59,25 @@
                 </p>
                 <div class="px-5">
                     {% for recipe in public_recipes %}
-                        <div class="card has-background-link-light mb-6 p-6">
-                            <div class="content is-flex is-justify-content-space-between">
-                                <a href="{{ url_for('profile', name=recipe.user.name) }}">
+                        <a class="card" href="{{ url_for('view_recipe', token=recipe.token) }}">
+                            <div class="card has-background-link-light mb-6 p-6">
+                                <div class="content is-flex is-justify-content-space-between">
                                     <span class="icon-text has-text-grey-light">
                                         <span class="icon">
                                             <i class="fa-solid fa-user"></i>
                                         </span>
                                         <span>{{ recipe.user.name }}</span>
                                     </span>
-                                </a>
-                                <span class="icon-text has-text-grey-light">
-                                    <span class="icon">
-                                        <i class="fa-solid fa-clock"></i>
+                                    <span class="icon-text has-text-grey-light">
+                                        <span class="icon">
+                                            <i class="fa-solid fa-clock"></i>
+                                        </span>
+                                        <span>{{ recipe.created_at|friendly_time }}</span>
                                     </span>
-                                    <span>{{ recipe.created_at|friendly_time }}</span>
-                                </span>
+                                </div>
+                                <p class="title is-4">{{ recipe.title }}</p>
                             </div>
-                            <p class="title is-4">{{ recipe.title }}</p>
-                        </div>
+                        </a>
                     {% endfor %}
                 </div>
             </div>

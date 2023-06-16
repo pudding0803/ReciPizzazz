@@ -19,13 +19,13 @@ $(document).ready(function () {
         const ingredients = [];
         $('.row').each(function () {
             ingredients.push({
-                name: $(this).find('.ingredient').val(),
+                name: $(this).find('.name').val(),
                 quantity: $(this).find('.quantity').val()
             });
         });
         const form = $(this);
         const data = new FormData(form[0]);
-        data.append('ingredients', JSON.stringify(ingredients));
+        data.append('ingredients', encodeURIComponent(JSON.stringify(ingredients)));
         $.ajax({
             type: 'POST',
             url: form.attr('action'),
