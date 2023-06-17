@@ -20,26 +20,28 @@
             </span>
         </div>
         <p class="title is-4">{{ recipe.title }}</p>
-        <div class="buttons">
-            <button class="button">
-                <span class="icon-text">
-                    <span class="icon">
-                        <i class="fa-regular fa-heart"></i>
+        {% if recipe.public %}
+            <div class="buttons">
+                <button class="button">
+                    <span class="icon-text">
+                        <span class="icon">
+                            <i class="fa-regular fa-heart"></i>
+                        </span>
+                        <span>0</span>
                     </span>
-                    <span>0</span>
-                </span>
-            </button>
-            <button class="button">
-                <span class="icon">
-                    <i class="fa-regular fa-bookmark"></i>
-                </span>
-            </button>
-            <button class="button">
-                <span class="icon">
-                    <i class="fa-solid fa-share"></i>
-                </span>
-            </button>
-        </div>
+                </button>
+                <button class="button">
+                    <span class="icon">
+                        <i class="fa-regular fa-bookmark"></i>
+                    </span>
+                </button>
+                <button class="button">
+                    <span class="icon">
+                        <i class="fa-solid fa-share"></i>
+                    </span>
+                </button>
+            </div>
+        {% endif %}
         <p class="title is-5">材料</p>
         <div class="content">
             {% if ingredients %}
