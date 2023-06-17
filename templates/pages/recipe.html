@@ -2,7 +2,7 @@
 
 {% block content %}
 <div class="columns">
-    <div class="column is-8 is-offset-2 content">
+    <div class="column is-8 is-offset-2">
         <div class="is-flex is-justify-content-space-between content">
             <a href="{{ url_for('profile', name=recipe.user.name) }}">
                 <span class="icon-text has-text-grey-light">
@@ -21,13 +21,19 @@
         </div>
         <p class="title is-4">{{ recipe.title }}</p>
         <p class="title is-5">材料</p>
-        <ul>
-            {% for ingredient in recipe.ingredients %}
-                <li>{{ ingredient.name }} {{ ingredient.quantity }}</li>
-            {% endfor %}
-        </ul>
+        <div class="content">
+            {% if ingredients %}
+                <ul>
+                    {% for ingredient in ingredients %}
+                        <li>{{ ingredient.name }} {{ ingredient.quantity }}</li>
+                    {% endfor %}
+                </ul>
+            {% else %}
+                <p>無</p>
+            {% endif %}
+        </div>
         <p class="title is-5">作法</p>
-        <p>{{ recipe.contents|safe }}</p>
+        <div class="content">{{ recipe.contents|safe }}</div>
     </div>
 </div>
 {% endblock %}

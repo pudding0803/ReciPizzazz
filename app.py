@@ -170,10 +170,10 @@ def profile(name):
 def view_recipe(token):
     recipe = Recipe.query.filter_by(token=token).first()
     if recipe:
-        recipe.user.name = recipe.user.name     # ???
-        recipe.ingredients = json.loads(urllib.parse.unquote(recipe.ingredients))
-        recipe.user.name = recipe.user.name     # ???
-        return render_template('pages/recipe.html', recipe=recipe)
+        if not recipe.public and (not current_user.is_authenticated or recipe.user_id != current_user.id):
+            abort(401)
+        ingredients = json.loads(urllib.parse.unquote(recipe.ingredients))
+        return render_template('pages/recipe.html', recipe=recipe, ingredients=ingredients)
     else:
         flash('無此食譜', 'danger')
         return redirect(url_for('index'))
