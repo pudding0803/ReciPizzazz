@@ -5,7 +5,6 @@ import os
 import urllib.parse
 from datetime import datetime, timedelta
 
-import pytz
 from flask import Flask, render_template, request, abort, redirect, url_for, flash, Request
 from flask_ckeditor import CKEditor
 from flask_login import LoginManager, login_user, login_required, logout_user, current_user
@@ -68,7 +67,7 @@ def load_user_from_request(request: Request) -> User | None:
 
 @app.template_filter('friendly_time')
 def format_friendly_time(timestamp: datetime) -> str:
-    diff = datetime.now(pytz.timezone('Asia/Taipei')).replace(tzinfo=None) - timestamp
+    diff = datetime.now() - timestamp
     if diff < timedelta(minutes=1):
         return f'{diff.seconds} 秒前'
     elif diff < timedelta(hours=1):

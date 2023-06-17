@@ -20,7 +20,8 @@ $(document).ready(function () {
         $('.row').each(function () {
             ingredients.push({
                 name: $(this).find('.name').val(),
-                quantity: $(this).find('.quantity').val()
+                quantity: $(this).find('.quantity').val(),
+                unit: $(this).find('.unit').val()
             });
         });
         const form = $(this);

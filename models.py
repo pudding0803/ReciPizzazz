@@ -1,9 +1,7 @@
-import pytz
 from flask_login import UserMixin
 from flask_sqlalchemy import SQLAlchemy
-from datetime import datetime
 
-from sqlalchemy import UniqueConstraint
+from sqlalchemy import UniqueConstraint, func
 from sqlalchemy.orm import relationship
 
 db = SQLAlchemy()
@@ -16,7 +14,7 @@ class User(UserMixin, db.Model):
     account = db.Column(db.String(50), nullable=False, unique=True)
     password = db.Column(db.String(110), nullable=False)
     name = db.Column(db.String(50), nullable=False, unique=True)
-    created_at = db.Column(db.DateTime, nullable=False, default=datetime.now(pytz.timezone('Asia/Taipei')))
+    created_at = db.Column(db.DateTime, nullable=False, default=func.now())
 
     recipes = relationship("Recipe", backref="user")
 
@@ -31,8 +29,8 @@ class Recipe(db.Model):
     instructions = db.Column(db.Text, nullable=False)
     public = db.Column(db.Boolean, nullable=False)
     token = db.Column(db.String(30), unique=True)
-    created_at = db.Column(db.DateTime, nullable=False, default=datetime.now(pytz.timezone('Asia/Taipei')))
-    updated_at = db.Column(db.DateTime, nullable=False, default=datetime.now(pytz.timezone('Asia/Taipei')))
+    created_at = db.Column(db.DateTime, nullable=False, default=func.now())
+    updated_at = db.Column(db.DateTime, nullable=False, default=func.now())
 
 
 class Followership(db.Model):
@@ -56,7 +54,7 @@ class Like(db.Model):
     recipe_id = db.Column(db.Integer, db.ForeignKey('users.id'), nullable=False)
     liking = db.Column(db.Boolean, nullable=False, default=True)
     following = db.Column(db.Boolean, nullable=False, default=True)
-    created_at = db.Column(db.DateTime, nullable=False, default=datetime.now(pytz.timezone('Asia/Taipei')))
+    created_at = db.Column(db.DateTime, nullable=False, default=func.now())
 
     __table_args__ = (
         UniqueConstraint('user_id', 'recipe_id'),
@@ -70,7 +68,7 @@ class Bookmark(db.Model):
     user_id = db.Column(db.Integer, db.ForeignKey('users.id'), nullable=False)
     recipe_id = db.Column(db.Integer, db.ForeignKey('recipes.id'), nullable=False)
     marking = db.Column(db.Boolean, nullable=False, default=True)
-    created_at = db.Column(db.DateTime, nullable=False, default=datetime.now(pytz.timezone('Asia/Taipei')))
+    created_at = db.Column(db.DateTime, nullable=False, default=func.now())
 
     __table_args__ = (
         UniqueConstraint('user_id', 'recipe_id'),
