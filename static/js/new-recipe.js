@@ -15,7 +15,7 @@ $(document).ready(function () {
 
     $('form').on('submit', function (event) {
         event.preventDefault();
-        $('#contents').val(CKEDITOR.instances['contents'].getData());
+        $('#instructions').val(CKEDITOR.instances['instructions'].getData());
         const ingredients = [];
         $('.row').each(function () {
             ingredients.push({

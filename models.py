@@ -28,7 +28,7 @@ class Recipe(db.Model):
     user_id = db.Column(db.Integer, db.ForeignKey('users.id'), nullable=False)
     title = db.Column(db.String(50), nullable=False)
     ingredients = db.Column(db.Text, nullable=False)
-    contents = db.Column(db.Text, nullable=False)
+    instructions = db.Column(db.Text, nullable=False)
     public = db.Column(db.Boolean, nullable=False)
     token = db.Column(db.String(30), unique=True)
     created_at = db.Column(db.DateTime, nullable=False, default=datetime.now(pytz.timezone('Asia/Taipei')))
@@ -45,6 +45,21 @@ class Followership(db.Model):
 
     __table_args__ = (
         UniqueConstraint('follower_id', 'followed_id'),
+    )
+
+
+class Like(db.Model):
+    __tablename__ = 'likes'
+
+    id = db.Column(db.Integer, primary_key=True, autoincrement=True)
+    user_id = db.Column(db.Integer, db.ForeignKey('users.id'), nullable=False)
+    recipe_id = db.Column(db.Integer, db.ForeignKey('users.id'), nullable=False)
+    liking = db.Column(db.Boolean, nullable=False, default=True)
+    following = db.Column(db.Boolean, nullable=False, default=True)
+    created_at = db.Column(db.DateTime, nullable=False, default=datetime.now(pytz.timezone('Asia/Taipei')))
+
+    __table_args__ = (
+        UniqueConstraint('user_id', 'recipe_id'),
     )
 
 

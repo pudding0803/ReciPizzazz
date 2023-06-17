@@ -209,7 +209,7 @@ def new_recipe():
             user_id=current_user.id,
             title=form.title.data,
             ingredients=form.ingredients.data,
-            contents=form.contents.data,
+            instructions=form.instructions.data,
             public=form.public.data
         )
         db.session.add(recipe)

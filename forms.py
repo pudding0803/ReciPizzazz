@@ -21,6 +21,6 @@ class LoginForm(FlaskForm):
 class CKEditorForm(FlaskForm):
     title = StringField(validators=[DataRequired()])
     ingredients = StringField(validators=[DataRequired()])
-    contents = CKEditorField(validators=[DataRequired()])
+    instructions = CKEditorField(validators=[DataRequired()])
     public = BooleanField(default=True)
     submit = SubmitField()
