@@ -12,7 +12,7 @@ from flask_migrate import Migrate
 from hashids import Hashids
 from werkzeug.security import generate_password_hash, check_password_hash
 
-from forms import SignupForm, LoginForm, CKEditorForm
+from forms import SignupForm, LoginForm, RecipeForm
 from models import db, User, Recipe, Followership, Like, Bookmark
 
 config = configparser.ConfigParser()
@@ -218,7 +218,7 @@ def toggle_lock():
 @app.route('/new_recipe', methods=['GET', 'POST'])
 @login_required
 def new_recipe():
-    form = CKEditorForm()
+    form = RecipeForm()
     if form.validate_on_submit():
         recipe = Recipe(
             user_id=current_user.id,

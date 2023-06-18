@@ -18,7 +18,7 @@ class LoginForm(FlaskForm):
     submit = SubmitField()
 
 
-class CKEditorForm(FlaskForm):
+class RecipeForm(FlaskForm):
     title = StringField(validators=[DataRequired()])
     ingredients = StringField(validators=[DataRequired()])
     instructions = CKEditorField(validators=[DataRequired()])
