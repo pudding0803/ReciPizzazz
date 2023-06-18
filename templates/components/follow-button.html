@@ -1,0 +1,19 @@
+{% if following %}
+    <button id="follow-button" class="button is-info" data-following="true">
+        <span class="icon-text">
+            <span class="icon">
+                <i class="fa-solid fa-check"></i>
+            </span>
+            <span>追蹤中</span>
+        </span>
+    </button>
+{% else %}
+    <button id="follow-button" class="button is-primary" data-following="false">
+        <span class="icon-text">
+            <span class="icon">
+                <i class="fa-solid fa-plus"></i>
+            </span>
+            <span>追蹤</span>
+        </span>
+    </button>
+{% endif %}

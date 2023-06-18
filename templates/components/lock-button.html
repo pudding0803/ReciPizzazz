@@ -1,11 +1,11 @@
 {% if locked %}
-    <button class="button is-danger lock-button" data-state="locked">
+    <button class="button is-danger lock-button" data-locked="true">
         <span class="icon">
             <i class="fa-solid fa-lock"></i>
         </span>
     </button>
 {% else %}
-    <button class="button lock-button" data-state="unlocked">
+    <button class="button lock-button" data-locked="false">
         <span class="icon">
             <i class="fa-solid fa-lock-open"></i>
         </span>

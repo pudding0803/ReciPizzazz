@@ -84,9 +84,9 @@ def format_friendly_time(timestamp: datetime) -> str:
 def index():
     public_recipes = Recipe.query.filter_by(public=True).order_by(Recipe.created_at.desc()).all()
     self_recipes = Recipe.query.filter_by(user_id=current_user.id).all() if current_user.is_authenticated else []
-    bookmarked_recipes = db.session.query(Recipe)\
-        .join(Bookmark, Recipe.id == Bookmark.recipe_id)\
-        .filter_by(user_id=current_user.id, marked=True)\
+    bookmarked_recipes = db.session.query(Recipe) \
+        .join(Bookmark, Recipe.id == Bookmark.recipe_id) \
+        .filter_by(user_id=current_user.id, marked=True) \
         .all() if current_user.is_authenticated else []
     return render_template(
         'pages/index.html',
@@ -151,18 +151,19 @@ def logout():
 def profile(name):
     user = User.query.filter_by(name=name).first()
     if user:
-        recipe_count = Recipe.query.filter_by(user_id=user.id, public=True).count()
-        followed_count = Followership.query.filter_by(followed_id=user.id, following=True).count()
-        public_recipes = Recipe.query.filter_by(user_id=user.id, public=True).order_by(Recipe.created_at.desc()).all()
-        following = current_user.is_authenticated and \
-                    Followership.query.filter_by(follower_id=current_user.id, followed_id=user.id).first() is not None
+        follower_count = Followership.query.filter_by(followed_id=user.id, following=True).count()
+        if current_user.is_authenticated and user.id == current_user.id:
+            recipes = Recipe.query.filter_by(user_id=user.id).order_by(Recipe.created_at.desc()).all()
+        else:
+            recipes = Recipe.query.filter_by(user_id=user.id, public=True).order_by(Recipe.created_at.desc()).all()
+        following = current_user.is_authenticated and Followership.query.\
+            filter_by(follower_id=current_user.id, followed_id=user.id, following=True).first() is not None
         return render_template(
             'pages/profile.html',
             user=user,
             following=following,
-            recipe_count=recipe_count,
-            followed_count=followed_count,
-            public_recipes=public_recipes
+            follower_count=follower_count,
+            recipes=recipes
         )
     else:
         flash('無此使用者', 'danger')
@@ -178,14 +179,14 @@ def view_recipe(token):
             abort(401)
         ingredients = json.loads(urllib.parse.unquote(recipe.ingredients))
         like = Like.query.filter_by(user_id=current_user.id, recipe_id=recipe.id).first()
-        like_count = Like.query.filter_by(recipe_id=recipe.id, liked=True).count()
+        liked_count = Like.query.filter_by(recipe_id=recipe.id, liked=True).count()
         bookmark = Bookmark.query.filter_by(user_id=current_user.id, recipe_id=recipe.id).first()
         return render_template(
             'pages/recipe.html',
             recipe=recipe,
             ingredients=ingredients,
             liked=like and like.liked,
-            like_count=like_count,
+            liked_count=liked_count,
             marked=bookmark and bookmark.marked
         )
     else:
@@ -242,13 +243,29 @@ def add_recipe_row():
     return render_template('components/recipe-row.html')
 
 
+@app.route('/toggle_follow')
+def toggle_follow():
+    if not request.headers.get('X-Requested-With') == 'XMLHttpRequest':
+        abort(403)
+    following = request.args.get('following') == 'true'
+    followed = User.query.filter_by(name=urllib.parse.unquote(request.args.get('followed_name'))).first()
+    followership = Followership.query.filter_by(follower_id=current_user.id, followed_id=followed.id).first()
+    if followership:
+        followership.following = not following
+        db.session.commit()
+    else:
+        followership = Followership(follower_id=current_user.id, followed_id=followed.id)
+        db.session.add(followership)
+        db.session.commit()
+    return render_template('components/follow-button.html', following=not following)
+
+
 @app.route('/toggle_like')
-@login_required
 def toggle_like():
     if not request.headers.get('X-Requested-With') == 'XMLHttpRequest':
         abort(403)
     liked = request.args.get('liked') == 'true'
-    like_count = int(request.args.get('like_count')) + (-1 if liked else 1)
+    liked_count = int(request.args.get('liked_count')) + (-1 if liked else 1)
     recipe = Recipe.query.filter_by(token=request.args.get('token')).first()
     like = Like.query.filter_by(user_id=current_user.id, recipe_id=recipe.id).first()
     if like:
@@ -258,11 +275,10 @@ def toggle_like():
         like = Like(user_id=current_user.id, recipe_id=recipe.id)
         db.session.add(like)
         db.session.commit()
-    return render_template('components/like-button.html', liked=not liked, like_count=like_count)
+    return render_template('components/like-button.html', liked=not liked, liked_count=liked_count)
 
 
 @app.route('/toggle_mark')
-@login_required
 def toggle_mark():
     if not request.headers.get('X-Requested-With') == 'XMLHttpRequest':
         abort(403)

@@ -1,5 +1,4 @@
 $(document).ready(function () {
-
     $(document).on('click', '#like-button', function() {
         const $button = $(this);
         $.ajax({
@@ -7,8 +6,8 @@ $(document).ready(function () {
             type: 'GET',
             data: {
                 token: window.location.pathname.split('/').pop(),
-                liked: $button.data('state') === 'liked',
-                like_count: $('#like-count').text()
+                liked: $button.data('liked'),
+                liked_count: $('#liked-count').text()
             },
             success: function(response) {
                 $button.replaceWith(response);
@@ -23,7 +22,7 @@ $(document).ready(function () {
             type: 'GET',
             data: {
                 token: window.location.pathname.split('/').pop(),
-                marked: $button.data('state') === 'marked'
+                marked: $button.data('marked')
             },
             success: function(response) {
                 $button.replaceWith(response);

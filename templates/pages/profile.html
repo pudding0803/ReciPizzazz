@@ -9,26 +9,8 @@
                 </div>
                 <div class="column is-narrow">
                     {% if current_user.is_authenticated and user.id != current_user.id %}
-                        {% if following %}
-                            <button class="button is-info">
-                                <span class="icon-text">
-                                    <span class="icon">
-                                        <i class="fa-solid fa-check"></i>
-                                    </span>
-                                    <span>追蹤中</span>
-                                </span>
-                            </button>
-                        {% else %}
-                            <button class="button is-primary">
-                                <span class="icon-text">
-                                    <span class="icon">
-                                        <i class="fa-solid fa-plus"></i>
-                                    </span>
-                                    <span>追蹤</span>
-                                </span>
-                            </button>
-                        {% endif %}
-                    {% else %}
+                        {% include 'components/follow-button.html' %}
+                    {% elif current_user.is_authenticated %}
                         <a href="#">
                             <span class="icon-text is-size-4 has-text-grey-light">
                                 <span class="icon">
@@ -50,7 +32,7 @@
                         <span class="is-size-5">食譜</span>
                     </span>
                 </div>
-                <p class="is-size-5">{{ recipe_count }}</p>
+                <p class="is-size-5">{{ recipes|count }}</p>
             </div>
             <div class="column is-1 has-text-centered">
                 <div class="content">
@@ -61,15 +43,15 @@
                         <span class="is-size-5">粉絲</span>
                     </span>
                 </div>
-                <p class="is-size-5">{{ followed_count }}</p>
+                <p id="follower-count" class="is-size-5">{{ follower_count }}</p>
             </div>
         </div>
         <hr>
-        <p class="title is-4">公開食譜</p>
+        <p class="title is-4">食譜</p>
         <div class="is-flex is-justify-content-space-between is-flex-wrap-wrap">
-        {% for recipe in public_recipes %}
-            <div class="column is-half">
-                <div class="card has-background-link-light my-2 p-6">
+        {% for recipe in recipes %}
+            <a class="column is-half" href="{{ url_for('view_recipe', token=recipe.token) }}">
+                <div class="card has-background-link-light m-2 p-6">
                     <p class="title is-4">{{ recipe.title }}</p>
                     <div class="is-flex is-justify-content-space-between">
                         <span class="icon-text has-text-grey-light">
@@ -80,8 +62,9 @@
                         </span>
                     </div>
                 </div>
-            </div>
+            </a>
         {% endfor %}
         </div>
     </div>
+    <script src="{{ url_for('static', filename='js/profile.js') }}" type="text/javascript"></script>
 {% endblock %}

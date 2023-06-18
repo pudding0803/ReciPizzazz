@@ -39,7 +39,7 @@ $(document).ready(function () {
         $.ajax({
             url: '/toggle_lock',
             type: 'GET',
-            data: { locked: $button.data('state') === 'locked' },
+            data: { locked: $button.data('locked') },
             success: function(response) {
                 $button.replaceWith(response);
             }
@@ -50,7 +50,7 @@ $(document).ready(function () {
         $('#ingredients > div').each(function() {
             const $quantity = $(this).find('.quantity');
             const $lock = $(this).find('.lock-button');
-            if ($lock.data('state') === 'unlocked') {
+            if (!$lock.data('locked')) {
                 const adjustedValue = $quantity.val() * parseFraction($('#adjust-ratio').text());
                 $quantity.val(+adjustedValue.toFixed(2));
             }
