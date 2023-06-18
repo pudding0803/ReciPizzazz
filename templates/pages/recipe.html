@@ -1,67 +1,57 @@
 {% extends 'base.html' %}
 
 {% block content %}
-<div class="columns">
-    <div class="column is-8 is-offset-2">
-        <div class="is-flex is-justify-content-space-between content">
-            <a href="{{ url_for('profile', name=recipe.user.name) }}">
+    <div class="columns">
+        <div class="column is-8 is-offset-2">
+            <div class="is-flex is-justify-content-space-between content">
+                <a href="{{ url_for('profile', name=recipe.user.name) }}">
+                    <span class="icon-text has-text-grey-light">
+                        <span class="icon">
+                            <i class="fa-solid fa-user"></i>
+                        </span>
+                        <span>{{ recipe.user.name }}</span>
+                    </span>
+                </a>
                 <span class="icon-text has-text-grey-light">
                     <span class="icon">
-                        <i class="fa-solid fa-user"></i>
+                        <i class="fa-solid fa-clock"></i>
                     </span>
-                    <span>{{ recipe.user.name }}</span>
+                    <span>{{ recipe.created_at|friendly_time }}</span>
                 </span>
-            </a>
-            <span class="icon-text has-text-grey-light">
-                <span class="icon">
-                    <i class="fa-solid fa-clock"></i>
-                </span>
-                <span>{{ recipe.created_at|friendly_time }}</span>
-            </span>
-        </div>
-        <p class="title is-4">{{ recipe.title }}</p>
-        {% if recipe.public %}
-            <div class="buttons">
-                <button class="button">
-                    <span class="icon-text">
-                        <span class="icon">
-                            <i class="fa-regular fa-heart"></i>
-                        </span>
-                        <span>0</span>
-                    </span>
-                </button>
-                <button class="button">
-                    <span class="icon">
-                        <i class="fa-regular fa-bookmark"></i>
-                    </span>
-                </button>
-                <button class="button">
-                    <span class="icon">
-                        <i class="fa-solid fa-share"></i>
-                    </span>
-                </button>
             </div>
-        {% endif %}
-        <p class="title is-5">材料</p>
-        <div class="content">
-            {% if ingredients %}
-                <ul>
-                    {% for ingredient in ingredients %}
-                        <li>{{ ingredient.name }} {{ ingredient.quantity }} {{ ingredient.unit }}</li>
-                    {% endfor %}
-                </ul>
-            {% else %}
-                <p>無</p>
+            <p class="title is-4">{{ recipe.title }}</p>
+            {% if recipe.public %}
+                <div class="buttons">
+                    {% include 'components/like-button.html' %}
+                    {% include 'components/mark-button.html' %}
+                    <button class="button">
+                        <span class="icon">
+                            <i class="fa-solid fa-share"></i>
+                        </span>
+                    </button>
+                </div>
             {% endif %}
-        </div>
-        <p class="title is-5">作法</p>
-        <div class="content">
-            {% if ingredients %}
-                <p>{{ recipe.instructions|safe }}</p>
-            {% else %}
-                <p>無</p>
-            {% endif %}
+            <p class="title is-5">材料</p>
+            <div class="content">
+                {% if ingredients %}
+                    <ul>
+                        {% for ingredient in ingredients %}
+                            <li>{{ ingredient.name }} {{ ingredient.quantity }} {{ ingredient.unit }}</li>
+                        {% endfor %}
+                    </ul>
+                {% else %}
+                    <p>無</p>
+                {% endif %}
+            </div>
+            <p class="title is-5">作法</p>
+            <div class="content">
+                {% if ingredients %}
+                    <p>{{ recipe.instructions|safe }}</p>
+                {% else %}
+                    <p>無</p>
+                {% endif %}
+            </div>
         </div>
     </div>
-</div>
+    <script src="{{ url_for('static', filename='js/recipe.js') }}" type="text/javascript"></script>
 {% endblock %}

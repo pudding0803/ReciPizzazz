@@ -16,7 +16,7 @@ class User(UserMixin, db.Model):
     name = db.Column(db.String(50), nullable=False, unique=True)
     created_at = db.Column(db.DateTime, nullable=False, default=func.now())
 
-    recipes = relationship("Recipe", backref="user")
+    recipes = relationship('Recipe', backref='user')
 
 
 class Recipe(db.Model):
@@ -51,9 +51,8 @@ class Like(db.Model):
 
     id = db.Column(db.Integer, primary_key=True, autoincrement=True)
     user_id = db.Column(db.Integer, db.ForeignKey('users.id'), nullable=False)
-    recipe_id = db.Column(db.Integer, db.ForeignKey('users.id'), nullable=False)
-    liking = db.Column(db.Boolean, nullable=False, default=True)
-    following = db.Column(db.Boolean, nullable=False, default=True)
+    recipe_id = db.Column(db.Integer, db.ForeignKey('recipes.id'), nullable=False)
+    liked = db.Column(db.Boolean, nullable=False, default=True)
     created_at = db.Column(db.DateTime, nullable=False, default=func.now())
 
     __table_args__ = (
@@ -67,7 +66,7 @@ class Bookmark(db.Model):
     id = db.Column(db.Integer, primary_key=True, autoincrement=True)
     user_id = db.Column(db.Integer, db.ForeignKey('users.id'), nullable=False)
     recipe_id = db.Column(db.Integer, db.ForeignKey('recipes.id'), nullable=False)
-    marking = db.Column(db.Boolean, nullable=False, default=True)
+    marked = db.Column(db.Boolean, nullable=False, default=True)
     created_at = db.Column(db.DateTime, nullable=False, default=func.now())
 
     __table_args__ = (

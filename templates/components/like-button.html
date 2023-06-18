@@ -1,0 +1,19 @@
+{% if liked %}
+    <button id="like-button" class="button" data-state="liked">
+        <span class="icon-text">
+            <span class="icon has-text-danger">
+                <i class="fa-solid fa-heart"></i>
+            </span>
+            <span id="like-count">{{ like_count }}</span>
+        </span>
+    </button>
+{% else %}
+    <button id="like-button" class="button" data-state="unliked">
+        <span class="icon-text">
+            <span class="icon">
+                <i class="fa-regular fa-heart"></i>
+            </span>
+            <span id="like-count">{{ like_count }}</span>
+        </span>
+    </button>
+{% endif %}

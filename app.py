@@ -13,7 +13,7 @@ from hashids import Hashids
 from werkzeug.security import generate_password_hash, check_password_hash
 
 from forms import SignupForm, LoginForm, CKEditorForm
-from models import db, User, Recipe, Followership
+from models import db, User, Recipe, Followership, Like, Bookmark
 
 config = configparser.ConfigParser()
 config.read('config.ini')
@@ -84,11 +84,15 @@ def format_friendly_time(timestamp: datetime) -> str:
 def index():
     public_recipes = Recipe.query.filter_by(public=True).order_by(Recipe.created_at.desc()).all()
     self_recipes = Recipe.query.filter_by(user_id=current_user.id).all() if current_user.is_authenticated else []
+    bookmarked_recipes = db.session.query(Recipe)\
+        .join(Bookmark, Recipe.id == Bookmark.recipe_id)\
+        .filter_by(user_id=current_user.id, marked=True)\
+        .all() if current_user.is_authenticated else []
     return render_template(
         'pages/index.html',
         public_recipes=public_recipes,
         self_recipes=self_recipes,
-        bookmark_recipes=[]
+        bookmarked_recipes=bookmarked_recipes
     )
 
 
@@ -151,7 +155,7 @@ def profile(name):
         followed_count = Followership.query.filter_by(followed_id=user.id, following=True).count()
         public_recipes = Recipe.query.filter_by(user_id=user.id, public=True).order_by(Recipe.created_at.desc()).all()
         following = current_user.is_authenticated and \
-            Followership.query.filter_by(follower_id=current_user.id, followed_id=user.id).first() is not None
+                    Followership.query.filter_by(follower_id=current_user.id, followed_id=user.id).first() is not None
         return render_template(
             'pages/profile.html',
             user=user,
@@ -166,13 +170,24 @@ def profile(name):
 
 
 @app.route('/view_recipe/<token>')
+@login_required
 def view_recipe(token):
     recipe = Recipe.query.filter_by(token=token).first()
     if recipe:
-        if not recipe.public and (not current_user.is_authenticated or recipe.user_id != current_user.id):
+        if not recipe.public and recipe.user_id != current_user.id:
             abort(401)
         ingredients = json.loads(urllib.parse.unquote(recipe.ingredients))
-        return render_template('pages/recipe.html', recipe=recipe, ingredients=ingredients)
+        like = Like.query.filter_by(user_id=current_user.id, recipe_id=recipe.id).first()
+        like_count = Like.query.filter_by(recipe_id=recipe.id, liked=True).count()
+        bookmark = Bookmark.query.filter_by(user_id=current_user.id, recipe_id=recipe.id).first()
+        return render_template(
+            'pages/recipe.html',
+            recipe=recipe,
+            ingredients=ingredients,
+            liked=like and like.liked,
+            like_count=like_count,
+            marked=bookmark and bookmark.marked
+        )
     else:
         flash('無此食譜', 'danger')
         return redirect(url_for('index'))
@@ -225,6 +240,43 @@ def add_recipe_row():
     if not request.headers.get('X-Requested-With') == 'XMLHttpRequest':
         abort(403)
     return render_template('components/recipe-row.html')
+
+
+@app.route('/toggle_like')
+@login_required
+def toggle_like():
+    if not request.headers.get('X-Requested-With') == 'XMLHttpRequest':
+        abort(403)
+    liked = request.args.get('liked') == 'true'
+    like_count = int(request.args.get('like_count')) + (-1 if liked else 1)
+    recipe = Recipe.query.filter_by(token=request.args.get('token')).first()
+    like = Like.query.filter_by(user_id=current_user.id, recipe_id=recipe.id).first()
+    if like:
+        like.liked = not liked
+        db.session.commit()
+    else:
+        like = Like(user_id=current_user.id, recipe_id=recipe.id)
+        db.session.add(like)
+        db.session.commit()
+    return render_template('components/like-button.html', liked=not liked, like_count=like_count)
+
+
+@app.route('/toggle_mark')
+@login_required
+def toggle_mark():
+    if not request.headers.get('X-Requested-With') == 'XMLHttpRequest':
+        abort(403)
+    marked = request.args.get('marked') == 'true'
+    recipe = Recipe.query.filter_by(token=request.args.get('token')).first()
+    bookmark = Bookmark.query.filter_by(user_id=current_user.id, recipe_id=recipe.id).first()
+    if bookmark:
+        bookmark.marked = not marked
+        db.session.commit()
+    else:
+        bookmark = Bookmark(user_id=current_user.id, recipe_id=recipe.id)
+        db.session.add(bookmark)
+        db.session.commit()
+    return render_template('components/mark-button.html', marked=not marked)
 
 
 if __name__ == '__main__':

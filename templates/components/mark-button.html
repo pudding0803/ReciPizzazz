@@ -1,0 +1,13 @@
+{% if marked %}
+    <button id="mark-button" class="button" data-state="marked">
+        <span class="icon has-text-warning">
+            <i class="fa-solid fa-bookmark"></i>
+        </span>
+    </button>
+{% else %}
+    <button id="mark-button" class="button" data-state="unmarked">
+        <span class="icon">
+            <i class="fa-regular fa-bookmark"></i>
+        </span>
+    </button>
+{% endif %}
